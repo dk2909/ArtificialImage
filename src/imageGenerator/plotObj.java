@@ -5,37 +5,29 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.util.Random;
 import javax.swing.JFrame;
-import javax.swing.JPanel;
-import java.awt.Image;
-import java.awt.RadialGradientPaint;
-import java.awt.MultipleGradientPaint;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.IOException;
+import java.nio.file.Paths;
 import java.awt.Graphics2D;
 import javax.imageio.ImageIO;
-import java.awt.Component;
 import java.awt.GradientPaint;
-import java.awt.geom.Ellipse2D;
-import java.awt.geom.Point2D;
 
 public class plotObj extends JFrame{
     /**
      *
      */
+	// global values
+	int width = 1280;
+	int height = 720;
+	int numOfImages = 10;
+    
     private static final long serialVersionUID = 1L;
 
     public plotObj() throws Exception
     {
+    	String rootFolder = System.getProperty("user.dir");
+    	String filePath = rootFolder + "/samples/sampleImage";
 
-        String filePath = "/home/daniel/Documents/ArtificialImages/sampleImage"; //sampleImage is file name
-
-        //JPanel panel = new JPanel();
-        //setTitle("Sample Image");
-        //Color backgroundColor = Dark_RGB_Gen(); //
-        //setBackground(backgroundColor);
-        int height = 480;
-        int width = 640;
         setSize(width,height);
 
         //pack();
@@ -44,29 +36,26 @@ public class plotObj extends JFrame{
         Graphics gr = img.createGraphics();
         //dispose();
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-        //int numOfImages = 10;
-        //String filePathi = filePath;
-		/*for (int i = 0; i < numOfImages; i++) {
+        String filePathi = filePath;
+		for (int i = 0; i < numOfImages; i++) {
 			paint(gr);
 			int fileNum = i;
 			String fileNameEnd = String.valueOf(fileNum);
 			filePathi = filePath + fileNameEnd;
 			File file = new File(filePathi);
 			ImageIO.write(img, "jpg", file);
-		}*/
-        paint(gr);
+		}
 
+		return;
     }
 
     public void Create_Background (Graphics2D g)
     {
-        for(int i = 0; i < 640; i++) {
-            for (int j = 0; j < 480; j++) {
+        for(int i = 0; i < width; i++) {
+            for (int j = 0; j < height; j++) {
                 Color backgroundColor = Dark_RGB_Gen();
                 g.setColor(backgroundColor);
                 g.fillRect(i, j, 1, 1);
-                //Create_Background(gr, img, backgroundColor, i , j);
-                //System.out.printf("fill pixel at %d, %d\n", i, j);
             }
         }
     }
@@ -87,16 +76,14 @@ public class plotObj extends JFrame{
         for (int i = 0; i < objNum; i++)
         {
             // generate location
-            oMeany = 240;
-            oStdy = 1500;
-            oMeanx = 320;
-            oStdx = 1500;
-            //int x = (int)(Get_Gaussian() * Get_Controlled_Gaussian(oMeanx,oStdx));
-            //int y = (int)(Get_Gaussian() * Get_Controlled_Gaussian(oMeany,oStdy));
+            oMeany = height/2;
+            oStdy = height*2;
+            oMeanx = width/2;
+            oStdx = width*2;
             int x = Math.abs( (int)(Get_Controlled_Gaussian(oMeanx,oStdx)));
             int y = Math.abs(  (int)(Get_Controlled_Gaussian(oMeany,oStdy)));
             // draw object
-            if ((x < 640) && (y < 480)) {
+            if ((x < width) && (y < height)) {
                 Draw_Object(g2d,x,y);
             }
         }
@@ -108,10 +95,10 @@ public class plotObj extends JFrame{
         for (int i = 0; i < scatNum; i++)
         {
             // generate location
-            oMeany = 240;
-            oStdy = 920;
-            oMeanx = 330;
-            oStdx = 1280;
+            oMeany = height/2;
+            oStdy = height*2;
+            oMeanx = width/2;
+            oStdx = width*2;
             int x = (int)(Get_Controlled_Gaussian(oMeanx,oStdx));
             int y = (int)(Get_Controlled_Gaussian(oMeany,oStdy));
             // draw object
@@ -142,41 +129,17 @@ public class plotObj extends JFrame{
             oStd = randGen(0, 3);
             objDiam1 = (int)(Get_Controlled_Gaussian(oMean,oStd));
             objDiam2 = (int)(Get_Controlled_Gaussian(oMean,oStd));
-            float xf = (float)x;
-            float yf = (float)y;
-            float d1 = (float)objDiam1;
             maxD1 = Math.max(maxD1, objDiam1);
             maxD2 = Math.max(maxD2, objDiam2);
-            //g.setColor(objectColor);
-            //g.fillOval(x, y, objDiam1, objDiam2);
-            //Fade_Object(x,y,objDiam1,objDiam2,objectColor,g);
-            //System.out.printf("ObjectDiam: %d,%d \n", objDiam1, objDiam2);
-            //Oval ov = new Oval(x, y, objDiam1, objDiam2);
-            //float[] dist = {0.5f, 1f};
-            //Color[] colors = {objectColor, bgColor};
-            //Point2D center = new Point2D.Float(xf, yf);
-            //RadialGradientPaint gradient = new RadialGradientPaint(center, d1, dist, colors);
-            //g.setPaint(gradient);
-            //g.setColor(objectColor);
-            //g.fillOval(x, y, objDiam1, objDiam2);
-            if ( (x > 0) && (x < 640) && (y > 0) && (y < 480)) {
+            if ( (x > 0) && (x < width) && (y > 0) && (y < height)) {
                 int fadeconstant = 8;
                 for(int j = 0; j < 100; j++){
                     Color fadecolor = new Color(objectColor.getRed(), objectColor.getGreen(), objectColor.getBlue(), Math.min(255, (int)(2 * ((double)j))));
                     g.setColor(fadecolor);
                     g.fillOval(x + (objDiam1) / 2 - (objDiam1 / ((j + fadeconstant) / fadeconstant)) / 2 + (int)(Get_Controlled_Gaussian(0,3)), y + (objDiam2) / 2 - (objDiam2 / ((j + fadeconstant) / fadeconstant))/ 2 + (int)(Get_Controlled_Gaussian(0,3)), objDiam1 / ((j + fadeconstant) / fadeconstant), objDiam2 / ((j + fadeconstant) / fadeconstant));
                 }
-                //Fade_Object2(x,y,objDiam1,objDiam2,objectColor,g);
             }
-            //g.setColor(bgColor);
-            //g.drawOval(x, y, objDiam1, objDiam2);
-            //gradient = new GradientPaint(x,y, objectColor, x-objDiam1, y-objDiam2, bgColor);
-            //g.setPaint(gradient);
-            //g.fillOval(x, y, objDiam1, objDiam2);
         }
-		/*if ( (x > 0) && (x < 640) && (y > 0) && (y < 480)) {
-			Fade_Object(x,y,maxD1,maxD2,objectColor,g);
-		}*/
     }
 
     public void Plot_Noise (Graphics2D g, int x, int y)
@@ -266,7 +229,7 @@ public class plotObj extends JFrame{
 
         // fade x-axis
         // to the right
-        if (x < (640-d1)) {
+        if (x < (width-d1)) {
             for (int i = 0; i < d1; i++) {
                 //System.out.printf("Begin fading right: R%d,G%d, B%d \n", R,G,B);
                 currX = x+i;
@@ -304,7 +267,7 @@ public class plotObj extends JFrame{
         }
 
         // up
-        if (y < (480-d2)) {
+        if (y < (height-d2)) {
             R = col.getRed();
             G = col.getGreen();
             B = col.getBlue();
@@ -428,11 +391,9 @@ public class plotObj extends JFrame{
     public double Get_Controlled_Gaussian(double gMean, double gStd)
     {
         Random randomObj = new Random();
-        //double gaussVal = gMean + randomObj.nextGaussian() + gVariance;
         double gaussVal = randomObj.nextGaussian(); // mean = 0, std = 1
         gaussVal *= gStd;
         gaussVal = gaussVal + gMean;
-        //double returnVal = Math.abs(gaussVal);
 
         return gaussVal;
     }
@@ -448,7 +409,7 @@ public class plotObj extends JFrame{
     public static void main(String[] args) throws Exception {
         plotObj o = new plotObj();
 
-        //System.exit(0);
+        System.exit(0);
 
     }
 
