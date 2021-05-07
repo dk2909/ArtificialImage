@@ -17,9 +17,9 @@ public class plotObj extends JFrame{
      *
      */
 	// global values
-	int width = 1280;
-	int height = 720;
-	int numOfImages = 10;
+	int width = 416;
+	int height = 416;
+	int numOfImages = 50;
     
     private static final long serialVersionUID = 1L;
 
@@ -125,7 +125,7 @@ public class plotObj extends JFrame{
         {
             objectColor = Virus_RGB();
             bgColor = Dark_RGB_Gen();
-            oMean = randGen(6,14);
+            oMean = randGen(3,7);
             oStd = randGen(0, 3);
             objDiam1 = (int)(Get_Controlled_Gaussian(oMean,oStd));
             objDiam2 = (int)(Get_Controlled_Gaussian(oMean,oStd));
