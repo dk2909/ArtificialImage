@@ -43,7 +43,7 @@ public class plotObj extends JFrame{
 			String fileNameEnd = String.valueOf(fileNum);
 			filePathi = filePath + fileNameEnd;
 			File file = new File(filePathi);
-			ImageIO.write(img, "jpg", file);
+			ImageIO.write(img, "png", file);
 		}
 
 		return;
@@ -409,7 +409,7 @@ public class plotObj extends JFrame{
     public static void main(String[] args) throws Exception {
         plotObj o = new plotObj();
 
-        System.exit(0);
+        //System.exit(0);
 
     }
 
