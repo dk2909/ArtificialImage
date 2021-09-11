@@ -41,7 +41,7 @@ public class plotObj extends JFrame{
 			paint(gr);
 			int fileNum = i;
 			String fileNameEnd = String.valueOf(fileNum);
-			filePathi = filePath + fileNameEnd;
+			filePathi = filePath + fileNameEnd + ".png";
 			File file = new File(filePathi);
 			ImageIO.write(img, "png", file);
 		}
